@@ -1,0 +1,249 @@
+---
+# IMPORTANT: Change settings here, but DO NOT change the spacing.
+# Remove comments and add values where applicable.
+# The descriptions below should be self-explanatory
+
+title: "Helping You Write Academic Papers in R using Texevier"
+#subtitle: "This will appear as Right Header"
+
+documentclass: "elsarticle"
+
+# --------- Thesis title (Optional - set to FALSE by default).
+# You can move the details below around as you please.
+Thesis_FP: FALSE
+# Entry1: "An unbelievable study with a title spanning multiple lines."
+# Entry2: "\\textbf{Nico Katzke}" # textbf for bold
+# Entry3: "A thesis submitted toward the degree of Doctor of Philosophy"
+# Uni_Logo: Tex/Logo.png # Place a logo in the indicated location (from your root, e.g. defaults to ~/Tex/Logo.png) and uncomment this line. Leave uncommented for no image
+# Logo_width: 0.3 # If using a logo - use this to set width (size) of image
+# Entry4: "Under the supervision of: \\vfill Prof. Joe Smith and Dr. Frank Smith"
+# Entry5: "Stellenbosch University"
+# Entry6: April 2020
+# Entry7:
+# Entry8:
+
+# --------- Front Page
+# Comment: ----- Follow this pattern for up to 5 authors
+AddTitle: TRUE # Use FALSE when submitting to peer reviewed platform. This will remove author names.
+Author1: "Nico Katzke^[__Contributions:__  \\newline _The authors would like to thank no institution for money donated to this project. Thank you sincerely._]"  # First Author - note the thanks message displayed as an italic footnote of first page.
+Ref1: "Prescient Securities, Cape Town, South Africa" # First Author's Affiliation
+Email1: "nfkatzke\\@gmail.com" # First Author's Email address
+
+Author2: "John Smith"
+Ref2: "Some other Institution, Cape Town, South Africa"
+Email2: "John\\@gmail.com"
+CommonAffiliation_12: TRUE # If Author 1 and 2 have a common affiliation. Works with _13, _23, etc.
+
+Author3: "John Doe"
+Email3: "Joe\\@gmail.com"
+
+CorrespAuthor_1: TRUE  # If corresponding author is author 3, e.g., use CorrespAuthor_3: TRUE
+
+# Comment out below to remove both. JEL Codes only given if keywords also given.
+keywords: "Multivariate GARCH \\sep Kalman Filter \\sep Copula" # Use \\sep to separate
+JELCodes: "L250 \\sep L100"
+
+# ----- Manage headers and footers:
+#BottomLFooter: $Title$
+#BottomCFooter:
+#TopLHeader: \leftmark # Adds section name at topleft. Remove comment to add it.
+BottomRFooter: "\\footnotesize Page \\thepage" # Add a '#' before this line to remove footer.
+addtoprule: TRUE
+addfootrule: TRUE               # Use if footers added. Add '#' to remove line.
+
+# --------- page margins:
+margin: 2.3 # Sides
+bottom: 2 # bottom
+top: 2.5 # Top
+HardSet_layout: TRUE # Hard-set the spacing of words in your document. This will stop LaTeX squashing text to fit on pages, e.g.
+# This is done by hard-setting the spacing dimensions. Set to FALSE if you want LaTeX to optimize this for your paper.
+
+# --------- Line numbers
+linenumbers: FALSE # Used when submitting to journal
+
+# ---------- References settings:
+# You can download cls format here: https://www.zotero.org/ - simply search for your institution. You can also edit and save cls formats here: https://editor.citationstyles.org/about/
+# Hit download, store it in Tex/ folder, and change reference below - easy.
+bibliography: Tex/ref.bib       # Do not edit: Keep this naming convention and location.
+csl: Tex/harvard-stellenbosch-university.csl # referencing format used.
+# By default, the bibliography only displays the cited references. If you want to change this, you can comment out one of the following:
+#nocite: '@*' # Add all items in bibliography, whether cited or not
+# nocite: |  # add specific references that aren't cited
+#  @grinold2000
+#  @Someoneelse2010
+
+# ---------- General:
+RemovePreprintSubmittedTo: TRUE  # Removes the 'preprint submitted to...' at bottom of titlepage
+Journal: "Journal of Finance"   # Journal that the paper will be submitting to, if RemovePreprintSubmittedTo is set to TRUE.
+toc: FALSE                       # Add a table of contents
+numbersections: TRUE             # Should sections (and thus figures and tables) be numbered?
+fontsize: 11pt                  # Set fontsize
+linestretch: 1.2                # Set distance between lines.
+link-citations: TRUE            # This creates dynamic links to the papers in reference list.
+
+### Adding additional latex packages:
+# header-includes:
+#    - \usepackage{colortbl} # Add additional packages here.
+
+output:
+  pdf_document:
+    keep_tex: TRUE
+    template: Tex/TexDefault.txt
+    fig_width: 3.5 # Adjust default figure sizes. This can also be done in the chunks of the text.
+    fig_height: 3.5
+abstract: |
+  Abstract to be written here. The abstract should not be too long and should provide the reader with a good understanding what you are writing about. Academic papers are not like novels where you keep the reader in suspense. To be effective in getting others to read your paper, be as open and concise about your findings here as possible. Ideally, upon reading your abstract, the reader should feel he / she must read your paper in entirety.
+---
+
+<!-- First: Set your default preferences for chunk options: -->
+
+<!-- If you want a chunk's code to be printed, set echo = TRUE. message = FALSE stops R printing ugly package loading details in your final paper too. I also suggest setting warning = FALSE and checking for warnings in R, else you might find ugly warnings in your paper. -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.pos="H", fig.pos = 'H')
+# Note: Include = FALSE implies the code is executed, but not printed in your pdf.
+# warning and message = FALSE implies ugly messages and warnings are removed from your pdf.
+# These should be picked up when you execute the command chunks (code sections below) in your rmd, not printed in your paper!
+
+# Lets load in example data, and see how this can be stored and later called from your 'data' folder.
+if(!require("tidyverse")) install.packages("tidyverse")
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library(Rcpp)
+library(tseries)
+library("dplyr")
+install.packages("BVAR")
+library(BVAR)
+library(dplyr)
+data <- read.delim("C:/Users/jesic/OneDrive/Desktop/Studies 2021/Second Semester/Time series/Project Dawie/Real/11_South Africa.txt")
+
+
+
+# Notice that as you are working in a .Rproj file (I am assuming you are) - the relative paths of your directories start at your specified root.
+# This means that when working in a .Rproj file, you never need to use getwd() - it is assumed as your base root automatically.
+
+```
+
+
+<!-- ############################## -->
+<!-- # Start Writing here: -->
+<!-- ############################## -->
+
+# Introduction \label{Introduction}
+
+```{r}
+y <- diff(data$y)
+p <- diff(data$p)
+xa <- data[-1,]
+dp <- xa$dp
+q <- diff(data$q)
+r <- diff(data$r)
+ex <- diff(data$ex)
+im <- diff(data$im)
+po <- diff(data$po)
+
+dats <- cbind(y,p,dp,q,r,ex,im,po)
+dataa <- ts(dats, start=c(1980,3), frequency = 4)
+plot(dataa, main=" Representation of Data")
+
+x <- as.data.frame(dataa)
+as.ts(x)
+
+
+## TEST FOR STATIONARY 
+library(tseries)
+library(ggplot2)
+library(dplyr)
+
+detach("package:dplyr", character.only = TRUE)
+library("dplyr", character.only = TRUE)
+
+adf.test(x$y)
+adf.test(x$p)
+adf.test(x$dp)
+adf.test(x$q)
+adf.test(x$r)
+adf.test(x$ex)
+adf.test(x$im)
+adf.test(x$po)
+
+old.par <- par(mfrow=c(4,2))
+plot(acf(x$y, lag.max=20, plot=FALSE), ylab="Real Output", main="")
+plot(acf(x$p, lag.max=20, plot=FALSE), ylab="CPI", main="")
+plot(acf(x$dp, lag.max=20, plot=FALSE), ylab="Inflation", main="")
+plot(acf(x$q, lag.max=20, plot=FALSE), ylab="Real Stock Price Index" ,main="")
+plot(acf(x$r, lag.max=20, plot=FALSE), ylab="ST Domestic Interest Rate" ,main="")
+plot(acf(x$ex, lag.max=20, plot=FALSE), ylab="Real Exports" ,main="")
+plot(acf(x$im, lag.max=20, plot=FALSE), ylab="Real Imports" ,main="")
+plot(acf(x$po, lag.max=20, plot=FALSE), ylab="Oil Price" ,main="")
+par(old.par)
+
+
+
+p1 <- pp.test(x$y)
+p2 <- pp.test(x$p)
+p3 <- pp.test(x$dp)
+p4 <- pp.test(x$q)
+p5 <- pp.test(x$r)
+p6 <- pp.test(x$ex)
+p7 <- pp.test(x$im)
+p8 <- pp.test(x$po)
+
+## BVAR 
+
+devtools::install_github("nk027/BVAR")
+mn <- bv_minnesota(lambda = bv_lambda(mode = 0.2, sd = 0.4, min = 0.0001, max = 5),alpha = bv_alpha(mode = 2), var = 1e07)
+
+soc <- bv_soc(mode = 1, sd = 1, min = 1e-04, max = 50)
+sur <- bv_sur(mode = 1, sd = 1, min = 1e-04, max = 50)
+
+priors <- bv_priors(hyper = "auto", mn = mn, soc = soc, sur = sur)
+
+mh <- bv_metropolis(scale_hess = c(0.05, 0.0001, 0.0001),adjust_acc = TRUE, acc_lower = 0.25, acc_upper = 0.45)
+
+la <- bvar(x, lags=1)
+
+run <- bvar(x, lags = 5, n_draw = 50000, n_burn = 25000, n_thin = 1, priors = priors, mh = mh, verbose = TRUE)
+
+install.packages()
+
+print(run)
+
+plot(run)
+plot(run, type = "dens", vars_response = "y", vars_impulse = "y-lag1")
+
+fitted(run, type = "mean")
+
+plot(residuals(run, type = "mean"), vars = c("y", "p"))
+
+opt_irf <- bv_irf(horizon = 16, identification = TRUE)
+
+irf(run) <- irf(run, opt_irf, conf_bands = c(0.05, 0.16))
+
+plot(irf(run), area = TRUE, vars_impulse = c("y", "p"), vars_response = c(1:2, 6))
+
+predict(run) <- predict(run, horizon = 16, conf_bands = c(0.05, 0.16))
+plot(predict(run), area = TRUE, t_back = 32, vars = c("y", "dp", "p"))
+
+```
+ 
+# Conclusion
+
+
+
+\newpage
+
+# References {-}
+
+<div id="refs"></div>
+
+
+# Appendix {-}
+
+## Appendix A {-}
+
+Some appendix information here
+
+## Appendix B {-}
+

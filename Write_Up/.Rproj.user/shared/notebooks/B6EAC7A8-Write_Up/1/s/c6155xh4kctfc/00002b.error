@@ -1,0 +1,1 @@
+{"frames":[],"message":"Error in bvar(x, lags = 5, n_draw = 50000, n_burn = 25000, n_thin = 1,  : \n  unused arguments (lags = 5, n_draw = 50000, n_burn = 25000, n_thin = 1, priors = priors, mh = mh, verbose = TRUE)\n"}
